@@ -57,8 +57,17 @@ namespace MyPets
                 options.SlidingExpiration = true;
             });
 
+            //настраиваем политику авторизации для админ ареа
+            services.AddAuthorization(x =>
+            {//создаем политику AdminArea
+                x.AddPolicy("AdminArea", policy => { policy.RequireRole("admin"); });
+                });
+
             //добавляем поддержку контролл-в и предст-й mvc
-            services.AddControllersWithViews()
+            services.AddControllersWithViews(x =>
+            {       //для области Admin передаем политику AdminArea
+                x.Conventions.Add(new AdminAreaAuthorization("Admin", "AdminArea"));
+            })
                 //совместимость с asp.net.core 3.0
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddSessionStateTempDataProvider();
         }
@@ -82,6 +91,7 @@ namespace MyPets
             //регистрация маршрутов
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute("admin", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
