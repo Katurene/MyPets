@@ -9,19 +9,18 @@
     <div id="page-wrapper">
 
         @await Html.PartialAsync("HeaderPartial")
-                
+
         <div id="main">
             <div class="container">
                 <div class="row main-row">
-                    <div class="col-8 col-12-medium">                       
+                    <div class="col-8 col-12-medium">
                         @RenderBody()
-                    </div>                    
+                    </div>
+                    @await Html.PartialAsync("SidebarPartial")
                 </div>
-                @await Html.PartialAsync("SidebarPartial")
             </div>
         </div>
-
-       @await Html.PartialAsync("FooterPartial")
+        @await Html.PartialAsync("FooterPartial")
 
     </div>
 
